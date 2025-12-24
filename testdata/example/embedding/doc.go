@@ -1,0 +1,6 @@
+/*
+	hogehohge
+
+aaa
+*/
+package embedding
