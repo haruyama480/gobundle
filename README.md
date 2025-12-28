@@ -12,6 +12,11 @@ cd gobundle/testdata/example
 gobundle main.go
 ```
 
+gobundle doesn't support
+- `//go:embed`
+- initialization order
+- and following TODOs
+
 TODO
 - dot import
   - > If an explicit period (.) appears instead of a name, all the package's exported identifiers declared in that package's package block will be declared in the importing source file's file block and must be accessed without a qualifier.
