@@ -37,6 +37,8 @@ func Bundle(patterns ...string) (string, error) {
 		return "", err
 	}
 
+	rootPkgPath := pkg.Roots[0].PkgPath
+
 	var dstPkgName string
 	if len(pkg.Roots) == 1 {
 		if pkg.Roots[0].PkgPath == "command-line-arguments" {
@@ -50,11 +52,12 @@ func Bundle(patterns ...string) (string, error) {
 			// go/packages.Load ensures that if one of multiple is file path, all others are file paths under same directory.
 			// see: https://github.com/golang/tools/blob/f12a0aeabe48cd7a30bfa4c59ca57747b54628e1/go/packages/golist.go#L941
 		} else {
-			dstPkgName = "bundled" // FIXME
+			// merge into first package
+			dstPkgName = GetPackageNameFromPath(pkg.Roots[0].PkgPath)
 		}
 	}
 
-	out, err := pkg.unfold(dstPkgName)
+	out, err := pkg.unfold(dstPkgName, rootPkgPath)
 	if err != nil {
 		return "", err
 	}
@@ -137,7 +140,7 @@ func (p *Packages) scan(isRetain func(*packages.Package) bool) error {
 	return nil
 }
 
-func (p *Packages) unfold(dstPkgName string) (string, error) {
+func (p *Packages) unfold(dstPkgName string, rootPkgPath string) (string, error) {
 	pkgUnfoldStrFn := func(pkgPath PkgPath) string {
 		for i, imp := range p.ImportsUnfold {
 			if imp == pkgPath {
@@ -174,7 +177,7 @@ func (p *Packages) unfold(dstPkgName string) (string, error) {
 				if update {
 					return true
 				}
-				if pkgPath != "command-line-arguments" {
+				if pkgPath != PkgPath(rootPkgPath) {
 					update = replaceTopLevel(c, pkg, pkgUnfoldStrFn)
 					if update {
 						return true
