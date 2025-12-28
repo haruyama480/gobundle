@@ -4,7 +4,7 @@ import (
 	"flag"
 	"fmt"
 
-	"github.com/haruyama480/gobundler"
+	"github.com/haruyama480/gobundle"
 )
 
 func init() {
@@ -22,7 +22,7 @@ func main() {
 		return
 	}
 
-	out, err := gobundler.Bundle(flag.Args()...)
+	out, err := gobundle.Bundle(flag.Args()...)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return

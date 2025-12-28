@@ -1,11 +1,16 @@
-# gobundler
+# gobundle
 
-
-sample exec
+installation
 ```
-go build ./cmd/gobundle; (cd testdata/example && ../../gobundle ./main.go)
+go install github.com/haruyama480/gobundle/cmd/gobundle
 ```
 
+example
+```
+git clone https://github.com/haruyama480/gobundle/
+cd gobundle/testdata/example
+gobundle main.go
+```
 
 TODO
 - dot import

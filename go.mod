@@ -1,4 +1,4 @@
-module github.com/haruyama480/gobundler
+module github.com/haruyama480/gobundle
 
 go 1.25.0
 

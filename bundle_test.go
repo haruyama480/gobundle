@@ -1,4 +1,4 @@
-package gobundler
+package gobundle
 
 import (
 	"os"
