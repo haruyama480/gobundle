@@ -7,9 +7,15 @@ go install github.com/haruyama480/gobundle/cmd/gobundle
 
 example
 ```
-git clone https://github.com/haruyama480/gobundle/
-cd gobundle/testdata/example
-gobundle main.go
+mkdir tmp
+cd tmp
+
+cat <<EOF >go.mod
+module example.com/astutil
+require golang.org/x/tools v0.40.0
+EOF
+go mod download golang.org/x/tools
+gobundle golang.org/x/tools/go/ast/astutil > astutil.go
 ```
 
 gobundle doesn't support
