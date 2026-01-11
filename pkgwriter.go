@@ -20,7 +20,7 @@ type PkgWriter struct {
 func NewPkgWriter() *PkgWriter {
 	sb := &strings.Builder{}
 	sb.Grow(4 * 1024) // maybe 1 page
-	sb.WriteString(bundleHeader)
+	fmt.Fprintf(sb, bundleHeader)
 	return &PkgWriter{
 		Writer: sb,
 		Buf:    bytes.Buffer{},
@@ -29,18 +29,18 @@ func NewPkgWriter() *PkgWriter {
 }
 
 func (p *PkgWriter) WritePackageClause(pkgName string) {
-	p.Writer.WriteString(fmt.Sprintf("package %s\n\n", pkgName))
+	fmt.Fprintf(p.Writer, "package %s\n\n", pkgName)
 }
 
 func (p *PkgWriter) WriteImportDecl(imports []PkgPath, pkgStrFn func(PkgPath) string) {
 	if len(imports) > 0 {
-		p.Writer.WriteString("import (\n")
+		fmt.Fprintf(p.Writer, "import (\n")
 		for _, imp := range imports {
 			pkg := imp
 			importName := pkgStrFn(pkg)
-			p.Writer.WriteString(fmt.Sprintf("\t%s \"%s\"\n", importName, string(pkg)))
+			fmt.Fprintf(p.Writer, "\t%s \"%s\"\n", importName, string(pkg))
 		}
-		p.Writer.WriteString(")\n\n")
+		fmt.Fprintf(p.Writer, ")\n\n")
 	}
 }
 
@@ -58,7 +58,7 @@ func (p *PkgWriter) WritePackage(fset *token.FileSet, files []*ast.File, pkgPath
 	defer func() { p.count++ }()
 
 	if p.count > 0 {
-		p.Writer.WriteString("\n\n")
+		fmt.Fprintf(p.Writer, "\n\n")
 	}
 	fmt.Fprintf(p.Writer, pkgDelimFormat, pkgPath)
 
