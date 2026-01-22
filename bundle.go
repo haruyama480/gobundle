@@ -338,7 +338,10 @@ func replaceFieldSelector(cursor *astutil.Cursor, pkg *packages.Package, pkgUnfo
 
 	originPkg := named.Obj().Pkg()
 	if originPkg == nil {
-		panic("originPkg is nil: " + fmt.Sprintf("%s, %s", ident.Name, named.String())) // builtin types, like error
+		if named.Obj().Name() == "error" {
+			return false // builtin error type
+		}
+		panic("originPkg is nil: " + fmt.Sprintf("%s, %s", ident.Name, named.String())) // other builtin types
 	}
 
 	pkgUnfoldStr := pkgUnfoldStrFn(PkgPath(originPkg.Path()))
