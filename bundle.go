@@ -474,6 +474,9 @@ func replaceTopLevel(cursor *astutil.Cursor, pkg *packages.Package, pkgUnfoldStr
 	if !isTopLevel {
 		return false
 	}
+	if isTopLevel && ident.Name == "init" {
+		return false // init function
+	}
 
 	identPkg := pkg.PkgPath
 	prefix := pkgUnfoldStrFn(PkgPath(identPkg))
