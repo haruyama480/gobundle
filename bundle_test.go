@@ -2,6 +2,7 @@ package gobundle
 
 import (
 	"os"
+	"strings"
 	"testing"
 )
 
@@ -41,4 +42,29 @@ func TestBundle_embedding(t *testing.T) {
 		t.Fatal(err)
 	}
 	t.Log(out)
+}
+
+func TestBundle_unfolded_const_comment(t *testing.T) {
+	os.Chdir("./testdata/unfolded-const-comment")
+	out, err := Bundle(".")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	t.Log(out)
+
+	shouldContain := []string{
+		`
+const (
+	unfold0__Dummy1 = "" // comment
+
+	unfold0__Dummy2// comment
+	= ""
+)`,
+	}
+	for _, str := range shouldContain {
+		if !strings.Contains(out, str) {
+			t.Errorf("output should contain: %s", str)
+		}
+	}
 }
