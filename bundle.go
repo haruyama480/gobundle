@@ -238,10 +238,7 @@ func GetPackageNameFromPath(pkgPath string) string {
 		return ""
 	}
 	lastElem := path.Base(pkgPath)
-	if strings.HasPrefix(lastElem, "go-") {
-		return strings.TrimPrefix(lastElem, "go-")
-	}
-	return lastElem
+	return strings.TrimPrefix(lastElem, "go-")
 }
 
 const Delim = "__"
