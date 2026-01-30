@@ -53,6 +53,7 @@ func TestBundle_unfolded_const_comment(t *testing.T) {
 
 	t.Log(out)
 
+	// I want fix this test case. But this bug is caused by go/printer package.
 	shouldContain := []string{
 		`
 const (
