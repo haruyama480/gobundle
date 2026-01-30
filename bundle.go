@@ -231,12 +231,17 @@ func GetPackageIdentifier(spec *ast.ImportSpec) string {
 	return GetPackageNameFromPath(pkgPath)
 }
 
+// see: https://pkg.go.dev/golang.org/x/tools/internal/imports#ImportPathToAssumedName
 func GetPackageNameFromPath(pkgPath string) string {
 	pkgPath, _, ok := module.SplitPathVersion(pkgPath)
 	if !ok {
 		return ""
 	}
-	return path.Base(pkgPath)
+	lastElem := path.Base(pkgPath)
+	if strings.HasPrefix(lastElem, "go-") {
+		return strings.TrimPrefix(lastElem, "go-")
+	}
+	return lastElem
 }
 
 const Delim = "__"
@@ -415,6 +420,8 @@ func isPackageIdent(pkg *packages.Package, ident *ast.Ident) string {
 			if !ok {
 				continue
 			}
+			// FIXME: importName is determined by package name defined by package clause in go source file, not by last element of import path.
+			// But here, simply expect the package name which is formated by goimports.
 			importName := GetPackageIdentifier(importSpec)
 			if importName == "_" {
 				continue
