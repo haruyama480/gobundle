@@ -39,23 +39,7 @@ func Bundle(patterns ...string) (string, error) {
 
 	rootPkgPath := pkg.Roots[0].PkgPath
 
-	var dstPkgName string
-	if len(pkg.Roots) == 1 {
-		if pkg.Roots[0].PkgPath == "command-line-arguments" {
-			dstPkgName = "main" // FIXME
-		} else {
-			dstPkgName = GetPackageNameFromPath(pkg.Roots[0].PkgPath)
-		}
-	} else {
-		if pkg.Roots[0].PkgPath == "command-line-arguments" {
-			dstPkgName = "main" // FIXME
-			// go/packages.Load ensures that if one of multiple is file path, all others are file paths under same directory.
-			// see: https://github.com/golang/tools/blob/f12a0aeabe48cd7a30bfa4c59ca57747b54628e1/go/packages/golist.go#L941
-		} else {
-			// merge into first package
-			dstPkgName = GetPackageNameFromPath(pkg.Roots[0].PkgPath)
-		}
-	}
+	dstPkgName := "main" // TODO: make configurable
 
 	out, err := pkg.unfold(dstPkgName, rootPkgPath)
 	if err != nil {
