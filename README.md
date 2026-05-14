@@ -1,5 +1,7 @@
 # gobundle
 
+gobundle は、単一のgoファイルを標準パッケージ以外の依存パケージを展開して一つのgoファイルにバンドルして出力するCLIツールです。
+
 installation
 ```
 go install github.com/haruyama480/gobundle/cmd/gobundle
